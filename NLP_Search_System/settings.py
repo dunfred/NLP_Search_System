@@ -111,11 +111,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 PROJECT_ROOT = os.path.join(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = '/search_engine/static/'
 
 # Extra lookup directories for collectstatic to find static files
 STATICFILES_DIRS = (
-        os.path.join(PROJECT_ROOT, 'static'),
+        os.path.join(PROJECT_ROOT, 'search_engine/static'),
     )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
