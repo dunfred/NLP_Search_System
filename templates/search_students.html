@@ -40,7 +40,7 @@
 
 {% block javascript %}
 <script>
-    $.getJSON('http://127.0.0.1:8000/media/models/negative_tweets.json', function(data){                
+    $.getJSON('./media/models/negative_tweets.json', function(data){                
         $.each(data, function(key, value){
             console.log(value.text);
             $('#result').append('<li class="list-group-item"> ' + value.text + ' | <span class="text-muted">  </li>')
@@ -53,7 +53,7 @@
             $("#result").html("");
             var searchField = $("#search").val();
             var expression = new RegExp(searchField, "i");
-            $.getJSON('http://127.0.0.1:8000/api/users/?format=json', function(data){                
+            $.getJSON('{% url "user-api-details" %}', function(data){                
                 $.each(data, function(key, value){
                     //console.log(value.username, value.username.search(expression), value.location, value.location.search(expression));
                     if(value.username.search(expression) != -1 || value.location.search(expression) != -1 ){
