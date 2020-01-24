@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Sentimental Analysis | Comments {% endblock head_title %}
+
+{% block main_body %}
+<style>
+    #result {
+        position: absolute;
+        width: 100%;
+        max-width: 870px;
+        cursor: pointer;
+        overflow-y: auto;
+        max-height: 400px;
+        box-sizing: border-box;
+        z-index: 1001;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+
+    .link-class {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<br/><br/>
+<div class="container" style="width: 900px;">
+    <h2 align="center">API Live Sentimental Analysis Result Search Using Ajax</h2>
+    <h3 align="center">Search Previously Stored Sentiments Data</h3>
+    <br/><br/>
+    <div align="center">
+     <form id="sendForm" method="post">
+        {% csrf_token %}
+        <center>
+            <input type="text" name="search" id="search" placeholder="Search Comments Data"
+                class="form-control" />      
+        </center>    
+        <br/>
+        <center>
+            <button type="submit" class="btn btn-primary">Run</button>
+        </center>       
+     </form>
+    </div>
+    
+    <ul class="list-group" id="result"> </ul>
+
+</div>
+{% endblock main_body %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $("#sendForm").submit(function(e){
+            e.preventDefault();
+            $("#result").html("");
+            var searchField = $("#search").val();
+            $.ajax({
+                url: "http://127.0.0.1:8000/api/sentiments/",
+                type: "POST",
+                data: { search: searchField,
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function(resp) {
+                    $("#result").html("");
+                    $('#result').append('<li class="list-group-item">' + resp.search + ' | <span class="text-muted"> ' + resp.result + ' </li>')
+                }
+            });
+          });
+    });
+</script>
+
+{% comment %} 
+$("#search").keyup(function(){
+    $("#result").html("");
+    var searchField = $("#search").val();
+    var expression = new RegExp(searchField, "i");
+    $.getJSON('http://127.0.0.1:8000/api/?format=json', function(data){                
+        $.each(data, function(key, value){
+            console.log(value.search, value.search.search(expression), value.result, value.result.search(expression));
+            if(value.search.search(expression) != -1 || value.result.search(expression) != -1 ){
+                $('#result').append('<li class="list-group-item">' + value.search + ' | <span class="text-muted"> ' + value.result + ' </li>')
+            }
+            
+        });
+    });
+}); 
+{% endcomment %}
+
+{% endblock javascript %}

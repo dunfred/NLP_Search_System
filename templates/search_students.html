@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Registered Students{% endblock head_title %}
+
+{% block main_body %}
+<style>
+    #result {
+        position: absolute;
+        width: 100%;
+        max-width: 870px;
+        cursor: pointer;
+        overflow-y: auto;
+        max-height: 400px;
+        box-sizing: border-box;
+        z-index: 1001;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+
+    .link-class {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<br/><br/>
+<div class="container" style="width: 900px;">
+    <h2 align="center">API Live Students Search Using Ajax</h2>
+    <h3 align="center">Registered Students Data</h3>
+    <br/><br/>
+    <div align="center">
+        <input type="text" name="search" id="search" placeholder="Search Users Data"
+            class="form-control" />        
+        <br/>
+    </div>
+    
+    <ul class="list-group" id="result"> </ul>
+
+</div>
+{% endblock main_body %}
+
+{% block javascript %}
+<script>
+    $.getJSON('http://127.0.0.1:8000/media/models/negative_tweets.json', function(data){                
+        $.each(data, function(key, value){
+            console.log(value.text);
+            $('#result').append('<li class="list-group-item"> ' + value.text + ' | <span class="text-muted">  </li>')
+            
+            
+        });
+    });
+    $(document).ready(function(){        
+        $("#search").keyup(function(){
+            $("#result").html("");
+            var searchField = $("#search").val();
+            var expression = new RegExp(searchField, "i");
+            $.getJSON('http://127.0.0.1:8000/api/users/?format=json', function(data){                
+                $.each(data, function(key, value){
+                    //console.log(value.username, value.username.search(expression), value.location, value.location.search(expression));
+                    if(value.username.search(expression) != -1 || value.location.search(expression) != -1 ){
+                        $('#result').append('<li class="list-group-item"><img src="' + value.avatar +'" height="40" width="40" class="img-thumbnail" /> ' + value.username + ' | <span class="text-muted"> ' + value.location + ' </li>')
+                    }
+                    
+                });
+            });
+        });
+    });
+    
+</script>
+{% endblock javascript %}

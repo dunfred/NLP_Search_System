@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block head_title %} Django AJAX CRUD {% endblock head_title %}
+
+{% block main_body%}
+<div class="container">
+    <h1>Django AJAX CRUD</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <h3>ADD USER</h3>
+            <form id="addUser" method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- <div class="form-group">
+                    <input class="form-control" type="text" name="username" placeholder="Username" required>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control" type="text" name="location" placeholder="Location" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control">Your Photo &nbsp&nbsp&nbsp; {{form.avatar}}</label>
+                </div>  -->
+                {{ form.as_p }}
+                <button class="btn btn-primary form-control" type="submit">SUBMIT</button>
+            </form>
+            
+        </div>
+        <div class="col-md-8">
+            <h3>USERS</h3>
+            <table id="userTable" class="table table-striped">
+                <tr>
+                    <th>Username</th>
+                    <th>Location</th>
+                    <th>Avatar</th>
+                </tr>
+                {% if users %}
+                {% for user in users %}
+                    <tr id="user-{{user.id}}">
+                        <td class="userName userData" name="username">{{user.username}}</td>
+                        <td class="userLocation userData" name="location">{{user.location}}</td>
+                        <td class="userAvatar userData" name="avatar"><img src="./media/{{user.avatar}}" height="40" width="40" class="img-thumbnail"/></td>
+                        
+                        <td align="center">
+                            <button class="btn btn-success form-control" onclick="editUser({{user.id}})" data-toggle="modal">EDIT</button>
+                        </td>
+
+                        <td align="center">
+                            <button class="btn btn-danger form-control" onclick="deleteUser({{user.id}})" >DELETE</button>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                {% else %}
+                No users
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+<!--Modal-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" classs="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Update User</h4>
+            </div>
+            <form id="updateUser" action="">
+                <div class="modal-body">
+                    <input type="hidden" id="form-id" class="form-control" name="formId">                    
+                    
+                    <label for="username">Username</label>
+                    <input type="hidden" id="form-name" class="form-control" name="formName">
+                    
+                    <label for="location">Location</label>
+                    <input type="hidden" id="form-location" class="form-control" name="formLocation">
+
+                    <label for="avatar">Avatar</label>
+                    <input type="hidden" id="form-avatar" class="form-control" name="formAvatar">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_body%}
+
+{% block javascript %}
+<script>
+//Create Django Ajax Call
+$("form#addUser").submit(function() {
+    var usrnameInput    = $("input[name='username']").val().trim();
+    var locationInput   = $("input[name='location']").val().trim();
+    var avatarInput     = $("input[name='avatar']").val().trim();
+    
+    console.log(usrnameInput);
+    console.log(locationInput);
+    console.log(avatarInput);
+
+    if (usrnameInput && locationInput && avatarInput) {
+        //Create Ajax Call
+        $.ajax({
+            url         :    '{% url "create-user" %}',
+            type        :    'POST',
+            data        :     {
+                                username : usrnameInput,
+                                location : locationInput,
+                                avatar   : avatarInput,
+                                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success     : function(data) {
+                if (data.username) {
+                   alert(data.username);
+                    appendToUsrTable(data);
+                }
+            }
+
+        });
+    } else {
+        alert("All fields must have a valid value");
+    }
+    $("form#addUser").trigger("reset");
+    return false
+});
+
+function appendToUsrTable(user) {
+    $("#userTable > tbody:last-child").append(
+        '<tr id="user-{{user.id}}">' + 
+            '<td class="userName userData" name="username">{{user.username}}</td>' +
+            '<td class="userLocation userData" name="location">{{user.location}}</td>' + 
+            '<td class="userAvatar userData" name="avatar"><img src="./media/{{user.avatar}}" height="40" width="40" class="img-thumbnail"/></td>' +
+            
+            '<td align="center">' +
+                '<button class="btn btn-success form-control" onclick="editUser({{user.id}})" data-toggle="modal">EDIT</button>' +
+            '</td>' +
+
+            '<td align="center">' +
+                '<button class="btn btn-danger form-control" onclick="deleteUser({{user.id}})" >DELETE</button>' +
+            '</td>' +
+        '</tr>');
+}
+</script>
+{% endblock javascript %}
