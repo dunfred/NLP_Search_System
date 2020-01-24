@@ -1,6 +1,7 @@
 certifi==2019.9.11
-dj-database-url==0.5.0
 Django==2.2.7
+dj-database-url==0.5.0
+django-heroku-0.3.1
 django-cors-headers==3.2.0
 django-crispy-forms==1.7.2
 django-debug-toolbar==2.1
@@ -14,7 +15,6 @@ psycopg2==2.8.4
 psycopg2-binary==2.8.4
 PyJWT==1.7.1
 pytz==2019.3
-qrcode==6.1
 six==1.13.0
 sqlparse==0.3.0
 whitenoise==4.1.4
