@@ -35,7 +35,7 @@ class CheckMood:
             if len(token) > 0 and token not in string.punctuation and token.lower() not in self.stop_words:
                 cleaned_tokens.append(token.lower())
 
-        model = joblib.load('../media/models/sent_analysis_model_v1')
+        model = joblib.load('app/media/models/sent_analysis_model_v1')
 
         feature = dict([token, True] for token in cleaned_tokens)
 
