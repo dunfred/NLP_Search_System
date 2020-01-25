@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ng%d-8qq@4275u3on2q+44_2+vtk4soo&v1k8pl-=ulg!ulce2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['dunfred-nlp.herokuapp.com']
 
