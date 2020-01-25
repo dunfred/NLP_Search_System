@@ -54,7 +54,7 @@
             $("#result").html("");
             var searchField = $("#search").val();
             $.ajax({
-                url: "http://127.0.0.1:8000/api/sentiments/",
+                url: "{% url 'sentiments-api-details' %}",
                 type: "POST",
                 data: { search: searchField,
                         csrfmiddlewaretoken: "{{ csrf_token }}",
@@ -67,22 +67,5 @@
           });
     });
 </script>
-
-{% comment %} 
-$("#search").keyup(function(){
-    $("#result").html("");
-    var searchField = $("#search").val();
-    var expression = new RegExp(searchField, "i");
-    $.getJSON('http://127.0.0.1:8000/api/?format=json', function(data){                
-        $.each(data, function(key, value){
-            console.log(value.search, value.search.search(expression), value.result, value.result.search(expression));
-            if(value.search.search(expression) != -1 || value.result.search(expression) != -1 ){
-                $('#result').append('<li class="list-group-item">' + value.search + ' | <span class="text-muted"> ' + value.result + ' </li>')
-            }
-            
-        });
-    });
-}); 
-{% endcomment %}
 
 {% endblock javascript %}
