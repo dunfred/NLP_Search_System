@@ -1,2 +1,3 @@
 punkt
 stopwords
+averaged_perceptron_tagger
