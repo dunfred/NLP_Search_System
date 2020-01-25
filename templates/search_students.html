@@ -40,10 +40,10 @@
 
 {% block javascript %}
 <script>
-    $.getJSON('./media/models/negative_tweets.json', function(data){                
+    $.getJSON('../media/models/negative_tweets.json', function(data){                
         $.each(data, function(key, value){
             console.log(value.text);
-            $('#result').append('<li class="list-group-item"> ' + value.text + ' | <span class="text-muted">  </li>')
+            $('#result').append('<li class="list-group-item"> ' + value.text + ' | <span class="text-muted">  </li>');
             
             
         });
