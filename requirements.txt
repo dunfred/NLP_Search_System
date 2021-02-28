@@ -20,4 +20,4 @@ sqlparse==0.3.0
 whitenoise==4.1.4
 nltk==3.4.5
 joblib==0.13.2
-Pillow==7.0.0
+Pillow==7.1.0
